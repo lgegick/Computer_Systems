@@ -20,10 +20,9 @@ main:
 #############################################################
 
         la      $t6, a          # move a into $t6
-        sw      $zero, 0($t6)
         move    $t0, $zero      # set i to 0
         li      $t1, 6          # load the max value to iterate through
-frloop: beq     $t0, $t1, Exit
+frloop: beq     $t0, $t1, Exit  # branch if the i variable is equal to 6 (i < 6)
         la      $t2, array      # load the base array into $t2
         sll     $t3, $t0, 2     # move the increment to represent an index
         add     $t4, $t2, $t3   # move the base array to the index we want to see (array + offset)
@@ -34,12 +33,10 @@ frloop: beq     $t0, $t1, Exit
         j       frloop          # go back to the for loop
 
 Exit:
-        # print the value of A
-        la      $a0, value_decl
-        jal     print_string
-
-        lw      $a0, a
-        jal     print_int
+        la      $a0, value_decl # load out 'A = ' for debugging clarity
+        jal     print_string    # call procedure for printing a string
+        lw      $a0, a          # load out the result of the for-loop computation
+        jal     print_int       # call procedure for printing an int
 
 #############################################################
 # QUESTION 2
@@ -49,7 +46,7 @@ Exit:
         li      $t1, 4          # load the max value we iterate through
         la      $t4, vectorA    # load the base address for vectorA
         la      $t5, vectorB    # load the base address for vectorB
-frloop2:beq     $t0, $t1, Exit2
+frloop2:beq     $t0, $t1, Exit2 # branch if i increment is equal to 4 (i < 4)
         lw      $t6, 0($t4)     # get the value at index for vectorA
         lw      $t7, 0($t5)     # get the value at index for vectorB
         mul     $t8, $t6, $t7   # multiply $t6 and $t7 storing it in $t8
@@ -59,14 +56,12 @@ frloop2:beq     $t0, $t1, Exit2
         addi    $t0, $t0, 1     # increment the loop
         j       frloop2         # go back to the start
 Exit2:
-
-        # print the result for debugging
-        la      $a0, value2_decl
-        jal     print_string
-        move    $a0, $t9
-        jal     print_int
-        li      $a0, 10         # print a newline character
-        jal     print_char
+        la      $a0, value2_decl # load the string 'dot product =' for debugging clarity
+        jal     print_string    # call procedure to output a string
+        move    $a0, $t9        # load the value of the dot product between array A and B
+        jal     print_int       # call procedure to output an int
+        li      $a0, 10         # load a newline character
+        jal     print_char      # call procedure to output a character
 
         # exit the PROGRAM
 		li 		$v0, 10
