@@ -1,16 +1,14 @@
 # MIPS project 1
 
             .data
-q1_decl:    .asciiz     "****QUESTION 1*****\n"
 array:      .word       11, 22, 33, 44, 55, 66
 a:          .word       0
-value_decl: .asciiz     "A = "
+value_decl: .asciiz     "\nA = "
 
-q2_decl:    .asciiz     "\n*****QUESTION 2*****\n"
 vectorA:    .word       2, 3, 4, 5
 vectorB:    .word       4, 5, 6, 7
 result:     .word       0
-value2_decl:.asciiz     "Dot Product = "
+value2_decl:.asciiz     "\nDot Product = "
 
             .text
 
@@ -18,14 +16,9 @@ value2_decl:.asciiz     "Dot Product = "
 main:
 
 #############################################################
-# QUESITON 1
+# QUESTION 1
 #############################################################
 
-        # show question 1 decl
-        la      $a0, q1_decl
-        jal     print_string
-
-        # set up the for loop boundaries
         la      $t6, a          # move a into $t6
         sw      $zero, 0($t6)
         move    $t0, $zero      # set i to 0
@@ -49,14 +42,10 @@ Exit:
         jal     print_int
 
 #############################################################
-# QUESITON 2
+# QUESTION 2
 #############################################################
 
-        la      $a0, q2_decl
-        jal     print_string
-
-        # set register for holding the dot product
-        move    $t0, $zero      # load the value to increment the value 0
+        move    $t0, $zero      # load the value (i) to increment the value 0
         li      $t1, 4          # load the max value we iterate through
         la      $t4, vectorA    # load the base address for vectorA
         la      $t5, vectorB    # load the base address for vectorB
@@ -76,6 +65,8 @@ Exit2:
         jal     print_string
         move    $a0, $t9
         jal     print_int
+        li      $a0, 10         # print a newline character
+        jal     print_char
 
         # exit the PROGRAM
 		li 		$v0, 10
