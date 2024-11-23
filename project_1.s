@@ -19,6 +19,7 @@ main:
 #############################################################
 
         la      $t6, a          # move variable a into $t6
+        sw      $zero, 0($t6)   # set a = 0
         la      $t2, array      # load the base address of the array
         move    $t0, $zero      # set i to 0
 
@@ -66,7 +67,7 @@ Exit2:
 		li 		$v0, 10
 		syscall
 
-# print an int a, a to be printed must be in $a0
+# print an int a, value to be printed must be in $a0
 print_int:
 		li		$v0, 1
 		syscall
@@ -78,6 +79,7 @@ print_string:
 		syscall
 		jr 		$ra
 
+# print a char a, address must be given to register $a0
 print_char:
         li      $v0, 11
         syscall
