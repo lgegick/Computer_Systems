@@ -7,7 +7,6 @@ value_decl: .asciiz     "\nA = "
 
 vectorA:    .word       2, 3, 4, 5
 vectorB:    .word       4, 5, 6, 7
-result:     .word       0
 value2_decl:.asciiz     "\nDot Product = "
 
             .text
@@ -19,16 +18,15 @@ main:
 # QUESTION 1
 #############################################################
 
-        la      $t6, a          # move a into $t6
+        la      $t6, a          # move variable a into $t6
+        la      $t2, array      # load the base address of the array
         move    $t0, $zero      # set i to 0
-        li      $t1, 6          # load the max value to iterate through
-frloop: beq     $t0, $t1, Exit  # branch if the i variable is equal to 6 (i < 6)
-        la      $t2, array      # load the base array into $t2
-        sll     $t3, $t0, 2     # move the increment to represent an index
-        add     $t4, $t2, $t3   # move the base array to the index we want to see (array + offset)
-        lw      $t5, 0($t4)     # save the value in this location to $t5
-        add     $t7, $t7, $t5   # a = a + arr[i]
+
+frloop: beq     $t0, 6, Exit    # branch if the i variable is equal to 6 (i < 6)
+        lw      $t3, 0($t2)     # load the element at arr[i]
+        add     $t7, $t7, $t3   # a = a + arr[i]
         sw      $t7, 0($t6)     # save the value in variable 'a'
+        addi    $t2, $t2, 4     # move to next element in array
         addi    $t0, $t0, 1     # increment the loop
         j       frloop          # go back to the for loop
 
@@ -43,18 +41,19 @@ Exit:
 #############################################################
 
         move    $t0, $zero      # load the value (i) to increment the value 0
-        li      $t1, 4          # load the max value we iterate through
+        li      $t9, 0          # set the result equal to 0
         la      $t4, vectorA    # load the base address for vectorA
         la      $t5, vectorB    # load the base address for vectorB
-frloop2:beq     $t0, $t1, Exit2 # branch if i increment is equal to 4 (i < 4)
+
+frloop2:beq     $t0, 4 Exit2    # branch if i increment is equal to 4 (i < 4)
         lw      $t6, 0($t4)     # get the value at index for vectorA
         lw      $t7, 0($t5)     # get the value at index for vectorB
         mul     $t8, $t6, $t7   # multiply $t6 and $t7 storing it in $t8
         add     $t9, $t9, $t8   # add the multiplied value and store at $t9
         addi    $t4, $t4, 4     # get the next index for vectorA
         addi    $t5, $t5, 4     # get the next index for vectorB
-        addi    $t0, $t0, 1     # increment the loop
-        j       frloop2         # go back to the start
+        addi    $t0, $t0, 1     # increment the loop (i++)
+        j       frloop2         # repeat the loop
 Exit2:
         la      $a0, value2_decl # load the string 'dot product =' for debugging clarity
         jal     print_string    # call procedure to output a string
